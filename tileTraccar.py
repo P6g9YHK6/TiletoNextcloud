@@ -1,42 +1,69 @@
 import asyncio
-import requests
-from aiohttp import ClientSession
+import aiohttp
 from pytile import async_login
+import urllib.parse
+import os
+from datetime import datetime
+import time
 
-#Traccar Server (enter your Traccar Serve IP)
-server_ip = "10.237.104.72"
-
-#Tile Account Credentials (enter your Tile Account Login)
-email = "johndoe@hotmail.com"
-password = "secretpassword"
+server_url = "https:///apps/phonetrack/logGet//"
+email = "@."
+password = ""
+coordinate_file = "last_coordinates.txt"
 
 async def main() -> None:
-    """Run!"""
-    async with ClientSession() as session:
+    async with aiohttp.ClientSession() as session:
         api = await async_login(email, password, session)
-
         tiles = await api.async_get_tiles()
-        #print(tiles)
 
         for tile_uuid, tile in tiles.items():
             name = tile.name
-            lat = tile.latitude
-            lon = tile.longitude
-            alt = tile.altitude
-            uuid = tile.uuid
-            timestamp = tile.last_timestamp
-            #print(name, lat, lon, alt, uuid, timestamp)
-            print("Tile: " + name + ", Traccar device identifier/uniqueID is: ">
+            timestamp = int(time.mktime(datetime.fromisoformat(str(tile.last_timestamp)).timetuple()))
 
-            url = "http://{0}:5055/?id={1}&lat={2}&lon={3}&timestamp={4}&altitu>
-            server_ip,
-            uuid,
-            lat,
-            lon,
-            timestamp,
-            alt
-            )
+            stored_timestamp = get_stored_timestamp(name)
 
-            requests.put(url)
+            print(f"Tile: {name}")
+            print(f"Current Timestamp: {timestamp}")
+            print(f"Stored Timestamp:  {stored_timestamp}")
+
+            if stored_timestamp is not None and stored_timestamp == timestamp:
+                print("Timestamp has not changed. Skipping update.")
+                continue
+
+            url = f"{server_url}{name}?lat={tile.latitude}&lon={tile.longitude}&alt={tile.altitude}&timestamp={timestamp}"
+            headers = {
+                "User-Agent": "TileWorker"
+            }
+
+            print("Sending position to Phonetrack server:")
+            print(url)
+
+            async with session.get(url, headers=headers) as response:
+                if response.status == 200:
+                    print(f"{response.status} | Position sent successfully.")
+                    update_coordinate_file(name, timestamp)
+                else:
+                    print(f"{response.status} | Failed to send position.")
+
+def get_stored_timestamp(name):
+    if not os.path.isfile(coordinate_file):
+        return None
+
+    with open(coordinate_file, "r") as file:
+        for line in file:
+            stored_name, stored_timestamp = line.strip().split(",")
+
+            # Check if the line has the correct format
+            if len(line.strip().split(",")) != 2:
+                continue
+
+            if stored_name == name:
+                return int(stored_timestamp)
+
+    return None
+
+def update_coordinate_file(name, timestamp):
+    with open(coordinate_file, "w") as file:
+        file.write(f"{name},{timestamp}")
 
 asyncio.run(main())
