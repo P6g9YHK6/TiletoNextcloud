@@ -16,6 +16,10 @@ Get more tile to see if it can handle more data sent a once currently only one d
 
 # How to use ?
 
+Replace the following and run the .py as often as you desire
 server_url = "https://EXEMPLE.COM/apps/phonetrack/logGet/JOBID/"
+
 email = "TILE@MAIL.ADD"
+
 password = "********"
+
