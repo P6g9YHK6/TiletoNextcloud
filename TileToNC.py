@@ -11,12 +11,18 @@ email = "@."
 password = ""
 coordinate_file = "last_coordinates.txt"
 
+
 async def main() -> None:
     async with aiohttp.ClientSession() as session:
         api = await async_login(email, password, session)
         tiles = await api.async_get_tiles()
 
         for tile_uuid, tile in tiles.items():
+            if tile.last_timestamp is None:
+                print(f"Tile: {tile.name}")
+                print("Skipping tile. Missing last_timestamp.")
+                continue
+
             name = tile.name
             timestamp = int(time.mktime(datetime.fromisoformat(str(tile.last_timestamp)).timetuple()))
 
