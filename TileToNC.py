@@ -12,6 +12,7 @@ password = ""
 coordinate_file = "last_coordinates.txt"
 
 
+
 async def main() -> None:
     async with aiohttp.ClientSession() as session:
         api = await async_login(email, password, session)
@@ -27,10 +28,25 @@ async def main() -> None:
             timestamp = int(time.mktime(datetime.fromisoformat(str(tile.last_timestamp)).timetuple()))
 
             stored_timestamp = get_stored_timestamp(name)
-
+            
+            print("")
             print(f"Tile: {name}")
             print(f"Current Timestamp: {timestamp}")
             print(f"Stored Timestamp:  {stored_timestamp}")
+            
+            # Print the unused information
+            print("")
+            print(f"Unused information:")
+            print(f"Accuracy: {tile.accuracy}")
+            print(f"Archetype: {tile.archetype}")
+            print(f"Dead: {tile.dead}")
+            print(f"Firmware Version: {tile.firmware_version}")
+            print(f"Hardware Version: {tile.hardware_version}")
+            print(f"Kind: {tile.kind}")
+            print(f"Lost: {tile.lost}")
+            print(f"Lost Timestamp: {tile.lost_timestamp}")
+            print(f"UUID: {tile.uuid}")
+            print(f"Visible: {tile.visible}")
 
             if stored_timestamp is not None and stored_timestamp == timestamp:
                 print("Timestamp has not changed. Skipping update.")
