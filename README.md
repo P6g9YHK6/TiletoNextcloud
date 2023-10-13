@@ -25,4 +25,4 @@ email = "TILE@MAIL.ADD"
 password = "********"
 
 ## Tested on
-Slackware, Windows
+[Chronos](https://github.com/simse/chronos), Windows
