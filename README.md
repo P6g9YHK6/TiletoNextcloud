@@ -12,7 +12,7 @@ There is a built in rate limit to avoid bloating the nextcloud DB with unhelpful
 
 # Todo
 Get more tile to see if it can handle more data sent a once currently only one device at a time has been tested.
-
+get rid of stderr in case of device without data
 
 # How to use ?
 
@@ -24,3 +24,5 @@ email = "TILE@MAIL.ADD"
 
 password = "********"
 
+## Tested on
+Slackware, Windows
