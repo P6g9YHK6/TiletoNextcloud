@@ -13,6 +13,8 @@ There is a built in rate limit to avoid bloating the nextcloud DB with unhelpful
 
 🔲Get rid of stderr in case of device without data
 
+🔲Add health monitoring (probabably uptimekuma push)
+
 # How to use ?
 
 Replace the following and run the .py as often as you desire to refresh the data
