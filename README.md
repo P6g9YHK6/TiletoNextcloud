@@ -14,6 +14,8 @@ There is a built in rate limit to avoid bloating the nextcloud DB with unhelpful
 
 🔲Add health monitoring (probabably uptimekuma push)
 
+🔲 pray for tile to support: https://www.bleepingcomputer.com/news/google/google-rolls-out-new-find-my-device-network-to-android-devices/
+
 # How to use ?
 
 Replace the following and run the .py as often as you desire to refresh the data
