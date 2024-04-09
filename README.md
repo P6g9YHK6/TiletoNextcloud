@@ -9,7 +9,6 @@ Execute this script to automate the retrieval of Tile device information and upd
 There is a built in rate limit to avoid bloating the nextcloud DB with unhelpfull information.
 
 # Todo
-🔲Get more tile to see if it can handle more data sent a once currently only one device at a time has been tested.
 
 🔲Get rid of stderr in case of device without data
 
